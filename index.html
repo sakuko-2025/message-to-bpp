@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lời nhắn gửi từ hậu phương BO</title>
+    <!-- Nhúng font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <!-- Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* --- 1. CÀI ĐẶT MÀU SẮC (THEME BEARD PAPA'S: NAVY & YELLOW) --- */
+        :root {
+            --bg-navy: #003366;       /* Xanh Navy đậm */
+            --accent-yellow: #FFD200; /* Vàng tươi */
+            --paper-white: #ffffff;   /* Trắng */
+            --text-navy: #003366;     /* Chữ xanh */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-navy);
+            background-image: radial-gradient(rgba(255, 210, 0, 0.2) 2px, transparent 2px);
+            background-size: 30px 30px;
+            font-family: 'Patrick Hand', cursive;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--text-navy);
+        }
+
+        /* --- 2. KHUNG SLIDE --- */
+        .slider-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            border: 5px solid var(--accent-yellow);
+            outline: 5px solid var(--bg-navy);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Sticker trang trí */
+        .bg-deco {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.8;
+            z-index: 1;
+            animation: float 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .deco-1 { top: 20px; left: 20px; color: var(--accent-yellow); }
+        .deco-2 { bottom: 20px; right: 20px; color: var(--bg-navy); animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px) scale(0.95);
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 2;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        /* --- 3. BỐ CỤC NỘI DUNG --- */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+            max-width: 1000px;
+            align-items: center;
+        }
+        
+        .member-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin: auto;
+        }
+
+        .photo-frame {
+            background: var(--paper-white);
+            padding: 12px 12px 50px 12px;
+            box-shadow: 8px 8px 0px rgba(0, 51, 102, 0.15);
+            transform: rotate(-2deg);
+            transition: transform 0.3s;
+            width: 300px;
+            max-width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .member-card:hover .photo-frame {
+            transform: rotate(0deg) scale(1.03);
+            z-index: 5;
+            box-shadow: 12px 12px 0px var(--accent-yellow);
+        }
+        
+        .member-card:nth-child(2) .photo-frame { transform: rotate(2deg); }
+        .member-card:nth-child(2):hover .photo-frame { transform: rotate(0deg) scale(1.03); }
+
+        .photo-frame img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 2px;
+            border: 1px solid #eee;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+            color: var(--text-navy);
+            font-size: 1.2rem;
+        }
+
+        .tape-strip {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background-color: var(--accent-yellow);
+            opacity: 0.9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+            border-left: 2px dashed rgba(255,255,255,0.4);
+            border-right: 2px dashed rgba(255,255,255,0.4);
+        }
+
+        .message-note {
+            background-color: #fffde7;
+            padding: 15px 20px;
+            width: 360px;
+            max-width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 0px var(--bg-navy);
+            position: relative;
+            transform: rotate(1deg);
+            border: 2px solid var(--accent-yellow);
+        }
+
+        .message-note::before {
+            content: '★';
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-size: 24px;
+            color: var(--accent-yellow);
+            text-shadow: 1px 1px 0 #000;
+            transform: rotate(15deg);
+        }
+
+        .message-note h3 {
+            font-family: 'Mali', cursive;
+            font-size: 20px;
+            color: var(--text-navy);
+            margin-bottom: 5px;
+            line-height: 1.3;
+            border-bottom: 2px dashed var(--accent-yellow);
+            display: inline-block;
+        }
+
+        .message-note p {
+            font-size: 17px;
+            line-height: 1.4;
+            color: var(--text-navy);
+        }
+
+        /* --- 4. NAVIGATION BUTTONS --- */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--accent-yellow);
+            color: var(--bg-navy);
+            border: 3px solid var(--bg-navy);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: grid;
+            place-items: center;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--bg-navy);
+            color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn { left: 25px; }
+        .next-btn { right: 25px; }
+
+        /* --- 5. NÚT NHẠC --- */
+        .music-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--bg-navy);
+            border: 3px solid var(--accent-yellow);
+            border-radius: 50%;
+            color: var(--accent-yellow);
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            background-color: var(--accent-yellow);
+            color: var(--bg-navy);
+        }
+
+        .music-btn.playing {
+            animation: spin 3s linear infinite;
+            background-color: var(--accent-yellow);
+            color: var(--bg-navy);
+            border-color: var(--bg-navy);
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- 6. HUY HIỆU LOGO (NEW DESIGN) --- */
+        .title-slide-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-badge {
+            position: relative;
+            /* Đảm bảo huy hiệu vừa vặn */
+            width: min(60vh, 500px);
+            height: min(60vh, 500px);
+            border-radius: 50%;
+            background-color: var(--bg-navy); /* Vòng ngoài Navy */
+            border: 5px solid var(--accent-yellow); /* Viền vàng */
+            box-shadow: 0 15px 40px rgba(0, 51, 102, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* SVG Text Ring */
+        .logo-text-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        /* Vòng trong màu Vàng */
+        .logo-inner-yellow {
+            width: 68%;
+            height: 68%;
+            background-color: var(--accent-yellow);
+            border-radius: 50%;
+            border: 5px solid var(--paper-white); /* Viền trắng tách biệt */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            text-align: center;
+            color: var(--bg-navy);
+        }
+
+        .logo-inner-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .logo-inner-content i {
+            font-size: clamp(40px, 8vw, 70px);
+            margin-bottom: 5px;
+        }
+
+        .logo-inner-content .main-text {
+            font-family: 'Mali', cursive;
+            font-weight: 700;
+            font-size: clamp(24px, 5vw, 40px);
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .logo-inner-content .sub-text {
+            font-family: 'Patrick Hand', cursive;
+            font-size: clamp(16px, 3vw, 24px);
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        /* Ảnh tập thể tròn slide cuối */
+        .group-photo-circle {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* SVG Text Style */
+        text {
+            font-family: 'Mali', cursive;
+            font-weight: 800;
+            fill: var(--accent-yellow); /* Chữ Vàng nổi bật trên nền Navy */
+            /* GIẢM FONT SIZE và TĂNG LETTER SPACING ĐỂ KHÔNG BỊ RÍU */
+            font-size: 45px; 
+            letter-spacing: 8px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .slider-container {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                height: 100vh;
+                height: 100dvh;
+                width: 100%;
+                border: none;
+                border-radius: 0;
+            }
+
+            .bg-deco {
+                position: fixed;
+                z-index: 0;
+                opacity: 0.3;
+            }
+
+            .slide {
+                position: relative; 
+                opacity: 1 !important;
+                transform: none !important;
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                display: flex;
+                flex-direction: column;
+                padding: 40px 15px;
+                margin-bottom: 20px;
+                pointer-events: all;
+                z-index: 1;
+            }
+
+            .nav-btn { display: none !important; }
+            
+            .music-btn {
+                position: fixed;
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            .two-columns {
+                display: flex;
+                flex-direction: column;
+                gap: 50px;
+                height: auto;
+                overflow: visible;
+            }
+
+            .member-card { width: 100%; }
+            .photo-frame { width: 290px; }
+            .message-note { width: 300px; }
+
+            .slide:first-child {
+                min-height: 70vh; /* Giảm chiều cao trang bìa trên mobile */
+                margin-bottom: 40px;
+            }
+            
+            /* Điều chỉnh badge trên mobile */
+            .logo-badge {
+                width: 85vw;
+                height: 85vw;
+                max-width: 350px;
+                max-height: 350px;
+            }
+            
+            /* Chỉnh cỡ chữ SVG trên mobile nhỏ hơn chút nữa */
+            text { font-size: 38px; letter-spacing: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        
+        <!-- Nhạc nền -->
+        <audio id="bgMusic" loop>
+            <source src="https://www.dropbox.com/scl/fi/t308ogdp2h5eovbv1lure/Aloha-Cool-Piano-Cover-An-Coong.mp3?rlkey=c3i1ryol3r4cajlf2k7vdw02q&st=uxaxazkx&raw=1" type="audio/mp3">
+        </audio>
+
+        <!-- Nút bật/tắt nhạc -->
+        <button class="music-btn" onclick="toggleMusic()" title="Bật/Tắt nhạc">
+            <i class="fa-solid fa-music"></i>
+        </button>
+
+        <!-- Sticker trang trí chung -->
+        <i class="fa-solid fa-star bg-deco deco-1"></i>
+        <i class="fa-solid fa-cookie-bite bg-deco deco-2"></i>
+
+        <!-- === SLIDE 1: TRANG BÌA (HUY HIỆU LOGO MỚI) === -->
+        <div class="slide active">
+            <div class="title-slide-container">
+                <div class="logo-badge">
+                    <!-- Vòng chữ cong SVG -->
+                    <svg class="logo-text-ring" viewBox="0 0 500 500">
+                        <defs>
+                            <!-- Điều chỉnh đường cong để chữ không bị mất -->
+                            <path id="curveTop" d="M 50,250 A 200,200 0 1,1 450,250" fill="transparent" />
+                            <path id="curveBottom" d="M 50,250 A 200,200 0 0,0 450,250" fill="transparent" />
+                        </defs>
+                        <!-- Chữ Trên -->
+                        <text width="500">
+                            <textPath xlink:href="#curveTop" startOffset="50%" text-anchor="middle" dominant-baseline="middle">
+                                LỜI NHẮN GỬI
+                            </textPath>
+                        </text>
+                        <!-- Chữ Dưới -->
+                        <text width="500" dy="20"> <!-- Đẩy chữ xuống thấp hơn chút để ko dính -->
+                            <textPath xlink:href="#curveBottom" startOffset="50%" text-anchor="middle" dominant-baseline="middle">
+                                1% MỖI NGÀY
+                            </textPath>
+                        </text>
+                    </svg>
+
+                    <!-- Nội dung bên trong (Vàng) -->
+                    <div class="logo-inner-yellow">
+                        <div class="logo-inner-content">
+                            <i class="fa-solid fa-crown"></i>
+                            <div class="main-text">Nhóm số 1</div>
+                            <div class="sub-text">Cải tiến liên tục</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === SLIDE 2: THÀNH VIÊN 1 & 2 === -->
+        <div class="slide">
+            <div class="two-columns">
+                <!-- Người 1 -->
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/vkunn5ealxcmegk3vklln/VTDH.jpg?rlkey=kl6h2m0rpz0g9imlnxfn7qtk4&st=fng7frqp&raw=1" alt="Thành viên 1">
+                        <div class="photo-caption">Vũ Thị Diệu Huyền</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Mình là Diệu Huyền – phòng Ngành hàng. Gửi đến BPP lời biết ơn chân thành của mình, với tư cách là một khách hàng yêu bánh BPP. Trước khi là nhân viên của Sakuko thì mình đã là fan của bánh BPP. Mình vẫn nhớ khi phải xếp hàng dài để mua BPP trong Royal. Mỗi lần ăn bánh BPP mình đều cảm thấy rất vui và năng lượng tức thì. Cảm ơn BPP rất nhìuuu.
+Chúc các bạn BPP luôn thật nhiều sức khỏe để tiếp tục làm ra thật nhiều mẻ bánh ngon, mang thêm thật nhiều niềm vui đến cho các khách hàng.
+BPP là số 1. BPP cố lên nha !!!💪"</p>
+                    </div>
+                </div>
+
+                <!-- Người 2 -->
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/q5ve0tmxc19p06mib5yri/NVT.jpg?rlkey=jdn2nye33ndt4lzhvnw95cbov&st=mkbu5f82&raw=1" alt="Thành viên 2">
+                        <div class="photo-caption">Nông Văn Thắng</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Mình là Thắng p.Marketing. Một fan mới của bánh su kem Beard Papa's. Sự lớn mạnh của các bạn đang dần được thể hiện rõ rệt hơn, tất cả đều nhờ những nỗ lực cải tiến, tinh thần không ngại khó + đường lỗi lãnh đạo sáng suốt từ các cấp quản lý, tập thể này đang ngày càng gắn kết hơn. Chúc tất cả các bạn có 1 tháng thật bứt phá, về đích với những con số tăng trưởng ngoạn mục!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === SLIDE 3: THÀNH VIÊN 3 & 4 === -->
+        <div class="slide">
+            <div class="two-columns">
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/05sash37k789bb275s5zy/DTBH.png?rlkey=rtf35j08x4obt6ftb3c97emxg&st=dkgfnf64&raw=1" alt="Thành viên 3">
+                        <div class="photo-caption">Đào Thị Bảo Hân</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Em là Bảo Hân phòng HCNS. Em chúc team BPP Lê Đại Hành lúc nào cũng rộn ràng niềm vui vì đơn về liên tục, số tăng vun vút, về đích tháng 12 và "bận rộn" lan toả sự ngọt ngào của những chiếc bánh su đến mọi khách yêu 💛"</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/9t1x66abvtj7q1g77sju5/TH.jpg?rlkey=iz88akoti42iynmejd75kcwhm&st=a7r3aama&raw=1" alt="Thành viên 4">
+                        <div class="photo-caption">Đồng Thị Huế</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Em là Huế - phòng TCKT ạ. Em xin gửi lời chúc đến khối BPP thật nhiều sức khoẻ, nhiều năng lượng tích cực, chăm sóc khách hàng tận tâm, nhất là các khách vvvvvip nhà mình nhé, chúc cửa hàng nào cũng đạt target 200% ạ
+Team số 1 luôn đồng hành cùng các bạn nhaaaaa
+Cố lên 💪✨"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === SLIDE 4: THÀNH VIÊN 5 & 6 === -->
+        <div class="slide">
+            <div class="two-columns">
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/x5gwypoatqraxa2fseq0x/HTA.png?rlkey=9jgaymy4y3swc8du3rma0ko4t&st=5vpvqv50&raw=1" alt="Thành viên 5">
+                        <div class="photo-caption">Hà Tài Anh</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Em là Hà Tài Anh - phòng CNTT. Chúc cửa hàng BPP lúc nào cũng đông khách, bánh ra lò chiếc nào cũng xinh – cũng ngon, buôn bán suôn sẻ và ngày càng được nhiều người yêu mến. Mong rằng BPP sẽ luôn mang đến thật nhiều niềm vui và vị ngọt cho mọi người. 8386 456 6789 ❤️🔥💛"</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/lvb6a0kh6uakgzebtgajc/TPTL.jpg?rlkey=xooxlnjnndw9ktgrxo2s19os7&st=yr2woub0&raw=1" alt="Thành viên 6">
+                        <div class="photo-caption">Trần Phạm Thùy Linh</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Em là Thùy Linh - phòng HCNS. Chúc cả nhà một ngày mới thật rộn ràng, năng lượng căng đầy như mẻ bánh vừa ra lò, khách ghé đều và tiếng “ting ting” vang liên tục. Mong team mình vào ca với tinh thần vui vẻ, phối hợp ăn ý để mỗi chiếc bánh, mỗi đơn hàng trao tay đều mang theo nụ cười và một bill xinh xắn."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === SLIDE 5: THÀNH VIÊN 7 & 8 === -->
+        <div class="slide">
+            <div class="two-columns">
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/atlvxxyhezxfbtb3nwrxx/LTKH.png?rlkey=to2ldkk420781ii20i7bujea5&st=krok9v4b&raw=1" alt="Thành viên 7">
+                        <div class="photo-caption">Lê Thị Khánh Huyền</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Em là Huyền - p.Marketing. Chúc các cửa hàng có một tháng thật suôn sẻ, tràn đầy năng lượng và doanh số bùng nổ.
+Mỗi ngày là một bước tiến vững vàng, tiến gần hơn đến mục tiêu đã đặt ra và hậu phương sẽ luôn đồng hành cùng các bạn. 
+Cùng nhau cố gắng để tháng này bứt phá và cán đích thật đẹp nhé.🔥"</p>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="photo-frame">
+                        <div class="tape-strip"></div>
+                        <img src="https://www.dropbox.com/scl/fi/fqqfv6buslb6eoct74ynd/NVH.jpg?rlkey=3bkc29gccfj30n426vsed9ynm&st=yq5a4o1d&raw=1" alt="Thành viên 8">
+                        <div class="photo-caption">Nguyễn Việt Hoàng</div>
+                    </div>
+                    <div class="message-note">
+                        <h3>Gửi BPP Lê Đại Hành,</h3>
+                        <p>"Mình là Nguyễn Việt Hoàng - p.CNTT – một fan cứng của bánh BPP đây! Trước khi là đồng đội thì mình đã mê bánh BPP từ lâu rồi. Mỗi chiếc bánh không chỉ ngon mà còn mang lại niềm vui và năng lượng cho mình. Cảm ơn BPP đã luôn nỗ lực để tạo ra những mẻ bánh chất lượng.
+ Chúc BPP thật nhiều sức khỏe, thật nhiều sáng tạo để tiếp tục mang đến niềm vui cho khách hàng. BPP là số 1! Cố lên nhé 🔥🔥🔥"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === SLIDE 6: KẾT THÚC (HUY HIỆU LOGO MỚI) === -->
+        <div class="slide">
+            <div class="title-slide-container">
+                <div class="logo-badge">
+                    <!-- Vòng chữ cong SVG -->
+                    <svg class="logo-text-ring" viewBox="0 0 500 500">
+                        <defs>
+                            <!-- MỞ RỘNG BÁN KÍNH CHO SLIDE CUỐI -->
+                            <path id="curveTop2" d="M 35,250 A 215,215 0 1,1 465,250" fill="transparent" />
+                            <path id="curveBottom2" d="M 35,250 A 215,215 0 0,0 465,250" fill="transparent" />
+                        </defs>
+                        <!-- Chữ Trên -->
+                        <text width="500">
+                            <textPath xlink:href="#curveTop2" startOffset="50%" text-anchor="middle" dominant-baseline="middle">
+                                THANK YOU!
+                            </textPath>
+                        </text>
+                        <!-- Chữ Dưới (Đã chỉnh nhỏ và sát lên trên) -->
+                        <text width="500" dy="3" style="font-size: 20px; letter-spacing: 2px;">
+                            <textPath xlink:href="#curveBottom2" startOffset="50%" text-anchor="middle" dominant-baseline="middle">
+                                Cảm ơn bạn vì không ngừng nỗ lực, cải tiến hàng ngày!
+                            </textPath>
+                        </text>
+                    </svg>
+
+                    <!-- Nội dung bên trong (Ảnh tập thể) -->
+                    <div class="logo-inner-yellow">
+                         <img src="https://www.dropbox.com/scl/fi/v7wmtc6zz913p40gbabzf/bpp-logo.jpg?rlkey=eyil5tacmscmha6jeltn1v2nq&st=opzatyu6&raw=1" alt="Tập thể" class="group-photo-circle">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NÚT ĐIỀU HƯỚNG (Chỉ hiện trên PC) -->
+        <button class="nav-btn prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="nav-btn next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+
+    </div>
+
+    <!-- SCRIPT XỬ LÝ CHUYỂN SLIDE VÀ NHẠC -->
+    <script>
+        // Xử lý chuyển slide
+        const slides = document.querySelectorAll('.slide');
+        const nextBtn = document.querySelector('.next-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (index >= slides.length) currentSlide = 0;
+            else if (index < 0) currentSlide = slides.length - 1;
+            else currentSlide = index;
+
+            slides[currentSlide].classList.add('active');
+        }
+
+        nextBtn.addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowRight") showSlide(currentSlide + 1);
+            if(e.key === "ArrowLeft") showSlide(currentSlide - 1);
+        });
+
+        // Xử lý phát nhạc
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.querySelector('.music-btn');
+        let isPlaying = false;
+
+        bgMusic.volume = 0.5;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
+                musicBtn.title = "Bật nhạc";
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('playing');
+                musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                musicBtn.title = "Tắt nhạc";
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
